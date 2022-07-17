@@ -1,7 +1,5 @@
 package p1;
 
-import java.util.Arrays;
-
 public class LaserBeams {
     public static void main(String[] args) {
         int beams = numberOfBeams(new String[]{"011001", "000000", "010100", "001000"});

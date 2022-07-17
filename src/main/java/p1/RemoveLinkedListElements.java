@@ -9,6 +9,12 @@ public class RemoveLinkedListElements {
         ListNode node3 = new ListNode(6, node4);
         ListNode node2 = new ListNode(2, node3);
         ListNode first = new ListNode(1, node2);
+        ListNode result = removeElements(first, 2);
+
+        while (result != null) {
+            System.out.println(result.value);
+            result = result.next;
+        }
     }
 
     public static ListNode removeElements(ListNode head, int val) {

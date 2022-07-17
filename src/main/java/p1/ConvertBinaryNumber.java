@@ -1,7 +1,5 @@
 package p1;
 
-import java.util.LinkedList;
-
 public class ConvertBinaryNumber {
     public static void main(String[] args) {
         ListNode last = new ListNode(1, null);

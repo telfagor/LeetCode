@@ -1,7 +1,5 @@
 package p1;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class MergeNodes {
@@ -14,8 +12,7 @@ public class MergeNodes {
             head = head.next;
         }
 
-        ListNode last = new ListNode(0);
-        head.next = last;
+        head.next = new ListNode(0);
         head = first;
 
         while (head != null) {
@@ -40,34 +37,33 @@ public class MergeNodes {
             return head;
         }
 
-        List<ListNode> nodes = new ArrayList<>();
-        List<ListNode> sumNodes = new ArrayList<>();
+        ListNode currentNode = head.next;
+        ListNode newNodeList = new ListNode(0);
+        ListNode newNodeList2 = newNodeList;
 
-        int start = 0;
-        int end = 0;
-        int sum = 0;
-        while (head != null) {
-            if (head.value != 0) {
-                nodes.add(head);
-                end++;
+        while (currentNode != null && currentNode.value == 0) {
+            currentNode = currentNode.next;
+        }
+
+        ListNode modifyNode = currentNode;
+        while (currentNode != null) {
+            if (currentNode.value != 0) {
+                currentNode = currentNode.next;
             } else {
-                while (start < end) {
-                    sum += nodes.get(start).value;
-                    start++;
+                while (modifyNode != currentNode) {
+                    newNodeList.value += modifyNode.value;
+                    modifyNode = modifyNode.next;
                 }
-                if (sum > 0) {
-                    sumNodes.add(new ListNode(sum));
+
+                if (currentNode.next != null) {
+                    newNodeList.next = new ListNode(0);
                 }
+
+                currentNode = currentNode.next;
+                newNodeList = newNodeList.next;
             }
-            sum = 0;
-            head = head.next;
         }
-
-        for (int i = 0; i < sumNodes.size() - 1; i++) {
-            sumNodes.get(i).next = sumNodes.get(i + 1);
-        }
-
-        head = sumNodes.get(0);
+        head = newNodeList2;
         return head;
     }
 }
