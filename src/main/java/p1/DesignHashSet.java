@@ -45,11 +45,12 @@ public class DesignHashSet {
                 nodes[bucketIndex] = iterator.next;
                 return;
             }
-            while (iterator != null && iterator.next != null) {
-                if (iterator.value == key) {
+            while (iterator.next != null) {
+                if (iterator.next.value == key) {
                     iterator.next = iterator.next.next;
                     break;
                 }
+                iterator = iterator.next;
             }
         }
     }
