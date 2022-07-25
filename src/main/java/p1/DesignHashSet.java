@@ -1,6 +1,5 @@
 package p1;
 
-import java.util.Random;
 import java.util.Arrays;
 
 public class DesignHashSet {
@@ -39,15 +38,17 @@ public class DesignHashSet {
         if (contains(key)) {
             int bucketIndex = hashCode(key);
             Node iterator = nodes[bucketIndex];
-            if (iterator.value == key) {
-                nodes[bucketIndex] = nodes[bucketIndex].next;
+            if (iterator.value == key && iterator.next == null) {
+                nodes[bucketIndex] = null;
+            }
+            if (iterator.value == key && iterator.next != null) {
+                nodes[bucketIndex] = iterator.next;
                 return;
             }
-            while (iterator.next != null) {
-                if (iterator.next.value == key) {
+            while (iterator != null && iterator.next != null) {
+                if (iterator.value == key) {
                     iterator.next = iterator.next.next;
-                } else {
-                    iterator = iterator.next;
+                    break;
                 }
             }
         }
