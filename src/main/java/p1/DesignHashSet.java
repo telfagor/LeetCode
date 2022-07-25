@@ -4,46 +4,97 @@ import java.util.Random;
 import java.util.Arrays;
 
 public class DesignHashSet {
-    static Integer[] array = new Integer[20];
-    int realSize = 0;
+    private static final int BUCKET_SIZE = 1000;
+    static Node[] nodes;
+
+    public DesignHashSet() {
+        nodes = new Node[1000];
+    }
 
     public void add(int key) {
-        if (!contains(key) && realSize < array.length) {
-            array[realSize] = key;
-            realSize++;
+        int bucketIndex = hashCode(key);
+        if (nodes[bucketIndex] == null) {
+            Node node = new Node();
+            node.value = key;
+            nodes[bucketIndex] = node;
+        } else {
+            Node iterator = nodes[bucketIndex];
+            boolean isExist = false;
+            while (iterator.next != null) {
+                if (iterator.value == key) {
+                    isExist = true;
+                    break;
+                }
+                iterator = iterator.next;
+            }
+            if (!isExist) {
+                Node node = new Node();
+                node.value = key;
+                iterator.next = node;
+            }
         }
     }
 
     public void remove(int key) {
         if (contains(key)) {
-            for (int i = 0; i < realSize; i++) {
-                if (array[i] != null && array[i] == key) {
-                    array[i] = null;
+            int bucketIndex = hashCode(key);
+            Node iterator = nodes[bucketIndex];
+            if (iterator.value == key) {
+                nodes[bucketIndex] = nodes[bucketIndex].next;
+                return;
+            }
+            while (iterator.next != null) {
+                if (iterator.next.value == key) {
+                    iterator.next = iterator.next.next;
+                } else {
+                    iterator = iterator.next;
                 }
             }
         }
     }
-
     public boolean contains(int key) {
-        for (int i = 0; i < realSize; i++) {
-            if (array[i] != null && array[i] == key) {
+        int bucketIndex = hashCode(key);
+        if (nodes[bucketIndex] == null) {
+            return false;
+        }
+
+        Node iterator = nodes[bucketIndex];
+        while (iterator != null) {
+            if (iterator.value == key) {
                 return true;
             }
+            iterator = iterator.next;
         }
         return false;
     }
 
+    private int hashCode(int key) {
+        return key % BUCKET_SIZE;
+    }
+
+    class Node {
+        private int value;
+        private Node next;
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+    }
+
     public static void main(String[] args) {
         DesignHashSet obj = new DesignHashSet();
-        for (int i = 0; i < array.length; i++) {
-            obj.add(new Random().nextInt(20));
-        }
-
-        System.out.println(Arrays.toString(array));
-        System.out.println(obj.contains(7));
-        obj.remove(7);
-        System.out.println(obj.contains(7));
-
-        System.out.println(Arrays.toString(array));
+        System.out.println(obj.contains(5));
+        obj.add(1);
+        System.out.println(Arrays.toString(nodes));
+        obj.add(2);
+        System.out.println(Arrays.toString(nodes));
+        System.out.println(obj.contains(1));
+        System.out.println(obj.contains(3));
+        obj.add(2);
+        System.out.println(Arrays.toString(nodes));
+        System.out.println(obj.contains(2));
+        obj.remove(2);
+        System.out.println(Arrays.toString(nodes));
     }
 }
