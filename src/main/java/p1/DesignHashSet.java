@@ -51,6 +51,7 @@ public class DesignHashSet {
             }
         }
     }
+
     public boolean contains(int key) {
         int bucketIndex = hashCode(key);
         if (nodes[bucketIndex] == null) {
