@@ -7,29 +7,22 @@ public class DesignHashSet {
     static Node[] nodes;
 
     public DesignHashSet() {
-        nodes = new Node[1000];
+        nodes = new Node[BUCKET_SIZE];
     }
 
     public void add(int key) {
-        int bucketIndex = hashCode(key);
-        if (nodes[bucketIndex] == null) {
+        if (!contains(key)) {
             Node node = new Node();
             node.value = key;
-            nodes[bucketIndex] = node;
-        } else {
-            Node iterator = nodes[bucketIndex];
-            boolean isExist = false;
-            while (iterator.next != null) {
-                if (iterator.value == key) {
-                    isExist = true;
-                    break;
+            int bucketIndex = hashCode(key);
+            if (nodes[bucketIndex] == null) {
+                nodes[bucketIndex] = node;
+            } else {
+                Node currentNode = nodes[bucketIndex];
+                while (currentNode.next != null) {
+                    currentNode = currentNode.next;
                 }
-                iterator = iterator.next;
-            }
-            if (!isExist) {
-                Node node = new Node();
-                node.value = key;
-                iterator.next = node;
+                currentNode.next = node;
             }
         }
     }
@@ -37,20 +30,24 @@ public class DesignHashSet {
     public void remove(int key) {
         if (contains(key)) {
             int bucketIndex = hashCode(key);
-            Node iterator = nodes[bucketIndex];
-            if (iterator.value == key && iterator.next == null) {
+            Node currentNode = nodes[bucketIndex];
+
+            if (currentNode.value == key && currentNode.next == null) {
                 nodes[bucketIndex] = null;
-            }
-            if (iterator.value == key && iterator.next != null) {
-                nodes[bucketIndex] = iterator.next;
                 return;
             }
-            while (iterator.next != null) {
-                if (iterator.next.value == key) {
-                    iterator.next = iterator.next.next;
+
+            if (currentNode.value == key) {
+                nodes[bucketIndex] = currentNode.next;
+                return;
+            }
+
+            while (currentNode.next != null) {
+                if (currentNode.next.value == key) {
+                    currentNode.next = currentNode.next.next;
                     break;
                 }
-                iterator = iterator.next;
+                currentNode = currentNode.next;
             }
         }
     }
@@ -85,6 +82,12 @@ public class DesignHashSet {
     }
 
     public static void main(String[] args) {
+        int a = 5;
+        int b = 6;
+        String s = "abc";
+        System.out.println(a + b + s);
+
+
         DesignHashSet obj = new DesignHashSet();
         System.out.println(obj.contains(5));
         obj.add(1);
