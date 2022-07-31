@@ -83,11 +83,6 @@ public class DesignHashSet {
     }
 
     public static void main(String[] args) {
-        int a = 5;
-        int b = 6;
-        String s = "abc";
-        System.out.println(a + b + s);
-
 
         DesignHashSet obj = new DesignHashSet();
         System.out.println(obj.contains(5));
